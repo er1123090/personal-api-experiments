@@ -1,0 +1,14 @@
+﻿experiment_group,context_type,pref_type,filename,valid_samples,domain_acc,slot_f1,slot_prec,slot_rec,pref_slot_f1,pref_slot_prec,pref_slot_rec
+ours_memory,memory_api,easy,1223_imp-zs_gpt4omini_test1.json,281,1.0,0.2673,0.21,0.3673,0.4913,0.5924,0.4196
+ours_memory,memory_api,easy,1223_imps-zs_gpt4omini_test1.json,177,1.0,0.1629,0.1313,0.2145,0.3042,0.3228,0.2877
+ours_memory,memory_api,hard,1223_imps-zs_gpt4omini_test1.json,1143,0.9886,0.0341,0.023,0.0656,0.078,0.0817,0.0747
+ours_memory,memory_api,medium,1223_imps-zs_gpt4omini_test1.json,827,0.9891,0.0959,0.1176,0.081,0.2597,0.3173,0.2198
+ours_memory,memory_diag,easy,1223_imps-zs_gpt4omini_test1.json,177,1.0,0.1031,0.0871,0.1262,0.2197,0.2836,0.1792
+ours_memory,memory_diag,hard,1223_imps-zs_gpt4omini_test1.json,1143,1.0,0.0297,0.0203,0.0551,0.0715,0.083,0.0627
+ours_memory,memory_diag,medium,1223_imps-zs_gpt4omini_test1.json,827,0.9988,0.0666,0.086,0.0543,0.2006,0.2842,0.1551
+ours_memory,memory_only,easy,1223_imps-zs_gpt4omini_test2.json,283,1.0,0.1281,0.1379,0.1197,0.2389,0.3782,0.1746
+ours_memory,memory_only,easy,1223_imps-zs_gpt4omini_test1.json,177,1.0,0.0955,0.078,0.123,0.2073,0.2552,0.1745
+ours_memory,memory_only,hard,1223_imps-zs_gpt4omini_test2.json,1836,1.0,0.0158,0.0153,0.0163,0.0253,0.0391,0.0186
+ours_memory,memory_only,hard,1223_imps-zs_gpt4omini_test1.json,1143,1.0,0.0291,0.0196,0.056,0.0708,0.0795,0.0637
+ours_memory,memory_only,medium,1223_imps-zs_gpt4omini_test2.json,1279,1.0,0.0632,0.1259,0.0422,0.2018,0.3632,0.1398
+ours_memory,memory_only,medium,1223_imps-zs_gpt4omini_test1.json,827,1.0,0.0658,0.0822,0.0549,0.1998,0.2744,0.157

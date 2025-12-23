@@ -1,0 +1,14 @@
+{
+  "GetRestaurants": "I want to find a restaurant. Can you show me some options?",
+  "GetFlights": "I’m planning a trip and would like to search for available flights.",
+  "GetHotels": "I need to look for hotels for my stay. Can you help me find some?",
+  "GetTravel": "I’m planning a trip and want to explore travel options.",
+  "GetRideSharing": "I need a ride and want to check available ride-sharing options.",
+  "GetRentalCars": "I want to rent a car for my trip. Can you show me available options?",
+  "GetHomes": "I’m looking for a place to stay. Can you help me find some homes?",
+  "GetEvents": "I want to look for events happening nearby.",
+  "GetBuses": "I want to check bus options for my trip.",
+  "GetBanks": "I need to make a bank transfer. Can you help me ?",
+  "GetMedia": "I want to find something to watch. Can you recommend media?", 
+  "GetMusic": "I want to listen to music. Can you help me find songs or artists I might like?"
+}

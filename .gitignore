@@ -1,0 +1,31 @@
+# 1. 모든 json, jsonl 파일 무시
+*.json
+*.jsonl
+
+# 2. 특정 파일들은 예외 처리 (무시하지 않음)
+# 주의: 경로는 프로젝트 루트(personal-tool) 기준 상대 경로입니다.
+
+# Data files
+!/data/dev_3.json
+!/data/sampled_dataset_100.json
+!/data/sgd_converted_dev_mapped_grouped_with_pref_with_constraints.json
+
+# Mem0 
+!/mem0/pref_group.json
+!/mem0/pref_list.json
+!/mem0/temp_queries.json
+
+# Ours Memory 
+!/ours_memory/pref_group.json
+!/ours_memory/pref_list.json
+!/ours_memory/temp_queries.json
+
+# Vanilla LLM 
+!/vanillaLLM/pref_group.json
+!/vanillaLLM/pref_list.json
+!/vanillaLLM/temp_queries.json
+
+# Base 
+!/pref_group.json
+!/pref_list.json
+!/temp_queries.json

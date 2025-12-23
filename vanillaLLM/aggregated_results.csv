@@ -1,0 +1,10 @@
+﻿experiment_group,context_type,pref_type,filename,valid_samples,domain_acc,slot_f1,slot_prec,slot_rec,pref_slot_f1,pref_slot_prec,pref_slot_rec
+vanillaLLM,apilist-only,easy,1223_imp-zs_gpt4omini_test1.json,281,1.0,0.0066,0.0175,0.0041,0.0115,0.1538,0.006
+vanillaLLM,apilist-only,hard,1223_imp-zs_gpt4omini_test1.json,1836,1.0,0.0,0.0,0.0,0.0,0.0,0.0
+vanillaLLM,apilist-only,medium,1223_imp-zs_gpt4omini_test1.json,1279,1.0,0.0011,0.01,0.0006,0.0038,0.1071,0.0019
+vanillaLLM,diag-apilist,easy,1223_imp-zs_gpt4omini_test1.json,281,0.9964,0.2513,0.2012,0.3347,0.4544,0.5695,0.378
+vanillaLLM,diag-apilist,hard,1223_imp-zs_gpt4omini_test1.json,1836,0.9995,0.0053,0.0036,0.0103,0.0142,0.0179,0.0118
+vanillaLLM,diag-apilist,medium,1223_imp-zs_gpt4omini_test1.json,1279,0.9984,0.2197,0.2604,0.1901,0.4455,0.5496,0.3746
+vanillaLLM,diag-only,easy,1223_imp-zs_gpt4omini_test1.json,281,1.0,0.2673,0.21,0.3673,0.4913,0.5924,0.4196
+vanillaLLM,diag-only,hard,1223_imp-zs_gpt4omini_test1.json,1836,0.9995,0.005,0.0033,0.0098,0.0133,0.0164,0.0112
+vanillaLLM,diag-only,medium,1223_imp-zs_gpt4omini_test1.json,1279,0.9992,0.2329,0.2723,0.2035,0.4605,0.5571,0.3925
