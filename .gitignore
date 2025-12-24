@@ -1,12 +1,14 @@
 # 1. 모든 json, jsonl 파일 무시
 *.json
 *.jsonl
+*.log
 
 # 2. 특정 파일들은 예외 처리 (무시하지 않음)
 # 주의: 경로는 프로젝트 루트(personal-tool) 기준 상대 경로입니다.
 
 # Data files
 !/data/dev_3.json
+!/data/dev_4.json
 !/data/sampled_dataset_100.json
 !/data/sgd_converted_dev_mapped_grouped_with_pref_with_constraints.json
 
@@ -29,3 +31,5 @@
 !/pref_group.json
 !/pref_list.json
 !/temp_queries.json
+!/tools_schema.json
+

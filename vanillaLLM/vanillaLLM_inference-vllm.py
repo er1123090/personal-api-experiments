@@ -289,8 +289,8 @@ def process_with_vllm(
 
     # 3. Initialize VLLM Engine (Do this once)
     # trust_remote_code=True may be needed for some models
-    llm = LLM(model=model_name, tensor_parallel_size=tensor_parallel_size, trust_remote_code=True)
-    sampling_params = SamplingParams(temperature=0.0, max_tokens=1024)
+    llm = LLM(model=model_name, tensor_parallel_size=tensor_parallel_size, trust_remote_code=True, gpu_memory_utilization=0.8)
+    sampling_params = SamplingParams(temperature=0.0, max_tokens=2048)
 
     batch_prompts = []
     batch_metadata = [] # Stores context to reconstruct result later
@@ -439,7 +439,6 @@ if __name__ == "__main__":
         "--model_name", 
         type=str, 
         required=True,
-        choices=["deepseek-ai/DeepSeek-V3.2", "deepseek-ai/DeepSeek-R1-Distill-Llama-8B", "meta-llama/Llama-3.1-8B-Instruct"],
         help="Path to the local model or HF model ID (e.g., 'meta-llama/Llama-2-7b-chat-hf')."
     )
     

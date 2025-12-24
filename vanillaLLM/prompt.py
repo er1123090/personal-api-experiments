@@ -9,6 +9,10 @@ Your goal is to generate the correct API call based on the user's current reques
    - If the current request specifies a value, USE IT (even if it contradicts history).
    - If the current request is silent on a slot, FILL IT using the historical preference.
    - Do not invent values that are neither in history nor in the current request.
+4. **Output Format**: 
+  - Only output the final API call.
+  - Always output in the specified format without any additional text.
+
 
 Dialogue History:
 {dialogue_history}
@@ -17,8 +21,11 @@ User Utterance:
 {user_utterance}
 
 
-<API_CALL>
-function_name(arg1="value", arg2="value", ...)
+Output Format:
+{{function_name}}({{arg1}}="{{value}}", {{arg2}}="{{value}}", ...)
+
+
+Now produce the final  API call:
 """
 
 IMPLICIT_FS_PROMPT_TEMPLATE = """You are an intelligent API selection assistant.
@@ -31,6 +38,7 @@ Your goal is to generate the correct API call based on the user's current reques
    - If the current request specifies a value, USE IT (even if it contradicts history).
    - If the current request is silent on a slot, FILL IT using the historical preference.
    - Do not invent values that are neither in history nor in the current request.
+4. **Output Format**: Always output in the specified format without any additional text.
 
 Here are examples of how to infer implicit preferences:
 
@@ -90,7 +98,9 @@ Your goal is to generate the correct API call based on the user's current reques
    - If the current request specifies a value, USE IT (even if it contradicts history).
    - If the current request is silent on a slot, FILL IT using the historical preference.
    - Do not invent values that are neither in history nor in the current request.
-
+4. **Output Format**: 
+  - Only output the final API call.
+  - Always output in the specified format without any additional text.
    
 [Preference Groups]:
 {{
@@ -133,9 +143,8 @@ User Utterance:
 {user_utterance}
 
 Output Format:
-<API_CALL>
-function_name(arg1="value", arg2="value", ...)
+{{function_name}}({{arg1}}="{{value}}", {{arg2}}="{{value}}", ...)
 
 
-Now produce the correct API call:
+Now produce the final  API call:
 """
