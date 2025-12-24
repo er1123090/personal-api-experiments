@@ -24,16 +24,16 @@ Before generating the current call, analyze the `Dialogue History` or `Past API 
 * **Events**: event_name, city, category, event_location, number_of_tickets, time, address_of_location, date, venue_address, event_type
 * **Flights**: origin, inbound_arrival_time, is_redeye, outbound_departure_time, outbound_arrival_time, inbound_departure_time, return_date, airlines, seating_class, refundable, number_stops, destination_airport, departure_date, fare, destination, passengers, origin_airport
 * **Homes**: pets_allowed, visit_date, address, property_name, rent, number_of_baths, area, number_of_beds, furnished, phone_number
-* **Hotels**: has_wifi, average_rating, check_out_date, price, pets_welcome, number_of_days, location, check_in_date, phone_number, number_of_rooms, street_address, hotel_name
+* **Hotels**: has_wifi, average_star, check_out_date, price, pets_welcome, number_of_days, location, check_in_date, phone_number, number_of_rooms, street_address, hotel_name
 * **HouseStays**: rating, phone_number, has_laundry_service, check_out_date, total_price, check_in_date, address, number_of_adults, where_to
 * **Media**: title, directed_by, subtitles, genre
 * **Movies**: theater_name, movie_name, price, show_date, location, show_time, number_of_tickets, genre, show_type, street_address
 * **Music**: song_name, year, album, artist, genre, playback_device
 * **RentalCars**: dropoff_date, pickup_time, pickup_city, pickup_date, total_price, car_type, car_name, pickup_location
 * **Restaurants**: price_range, restaurant_name, city, has_live_music, serves_alcohol, time, date, phone_number, cuisine, street_address, party_size
-* **Salons**: is_unisex, average_rating, city, appointment_date, appointment_time, stylist_name, phone_number, street_address
+* **Salons**: is_unisex, average_star, city, appointment_date, appointment_time, stylist_name, phone_number, street_address
 * **Dentists**: dentist_name, phone_number, offers_cosmetic_services, city, appointment_date, appointment_time, address
-* **Doctors**: doctor_name, city, average_rating, appointment_date, appointment_time, type, phone_number, street_address
+* **Doctors**: doctor_name, city, average_star, appointment_date, appointment_time, type, phone_number, street_address
 * **Travel**: good_for_kids, category, attraction_name, location, phone_number, free_entry
 * **Weather**: city, temperature, date, precipitation, humidity, wind
 * **RideSharing**: destination, number_of_seats, shared_ride

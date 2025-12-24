@@ -74,7 +74,7 @@ def evaluate_single_file(file_path, preference_map=None):
 
     for item in data:
         gt_str = str(item.get("reference_ground_truth", "") or "").strip()
-        pred_str = str(item.get("gpt_output", "") or "").strip()
+        pred_str = str(item.get("llm_output", "") or "").strip()
 
         if not gt_str: continue
         valid_samples += 1
@@ -228,7 +228,7 @@ def aggregate_results(root_dir, pref_file, output_csv):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--root_dir", type=str, required=True, help="Root directory containing output JSON files")
-    parser.add_argument("--pref_file", type=str, default="/data/minseo/personal-tool/conv_api/experiments2/vanillaLLM/pref_list.json")
+    parser.add_argument("--pref_file", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/pref_list.json")
     parser.add_argument("--output_csv", type=str, default="aggregated_results.csv")
     
     args = parser.parse_args()

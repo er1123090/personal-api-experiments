@@ -87,7 +87,7 @@ def evaluate_dialogues(data, preference_map=None):
 
     for item in data:
         gt_str = str(item.get("reference_ground_truth", "") or "").strip()
-        pred_str = str(item.get("gpt_output", "") or "").strip()
+        pred_str = str(item.get("llm_output", "") or "").strip()
 
         if not gt_str:
             continue

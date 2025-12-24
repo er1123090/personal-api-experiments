@@ -87,7 +87,7 @@ def evaluate_dialogues(data, preference_map=None):
 
     for item in data:
         gt_str = str(item.get("reference_ground_truth", "") or "").strip()
-        pred_str = str(item.get("gpt_output", "") or "").strip()
+        pred_str = str(item.get("llm_output", "") or "").strip()
 
         if not gt_str:
             continue
@@ -224,7 +224,7 @@ def run_evaluation(test_file, pref_file=None):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--test_file", type=str, default="test_data.json", help="Path to the model output json")
-    parser.add_argument("--pref_file", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/pref_list.json", help="Path to the preference list json")
+    parser.add_argument("--pref_file", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/vanillaLLM/pref_list.json", help="Path to the preference list json")
     args = parser.parse_args()
         
     run_evaluation(args.test_file, args.pref_file)
