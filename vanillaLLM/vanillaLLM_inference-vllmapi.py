@@ -268,7 +268,7 @@ async def process_with_vllm_server_async(
     query_map = load_query_map(query_map_path)
     
     # 1. Load System Prompt
-    baseline_prompt_path = "/data/minseo/personal-tool/conv_api/experiments3/new_baseline_prompt_update.txt"
+    baseline_prompt_path = "/data/minseo/personal-api-experiments/new_baseline_prompt_update.txt"
     try:
         with open(baseline_prompt_path, "r", encoding="utf-8") as f: 
             baseline_prompt = f.read()
@@ -378,13 +378,13 @@ async def process_with_vllm_server_async(
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     
-    parser.add_argument("--input_path", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/data/dev_4.json")
+    parser.add_argument("--input_path", type=str, default="/data/minseo/personal-api-experiments/data/dev_4.json")
     parser.add_argument("--output_path", type=str, default="output.json")
     parser.add_argument("--log_path", type=str, default="process.log")
-    parser.add_argument("--query_path", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/temp_queries.json")
-    parser.add_argument("--pref_list_path", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/pref_list.json")
-    parser.add_argument("--pref_group_path", type=str, default="/data/minseo/personal-tool/conv_api/experiments3//pref_group.json")
-    parser.add_argument("--tools_schema_path", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/tools_schema.json")
+    parser.add_argument("--query_path", type=str, default="/data/minseo/personal-api-experiments/temp_queries.json")
+    parser.add_argument("--pref_list_path", type=str, default="/data/minseo/personal-api-experiments/pref_list.json")
+    parser.add_argument("--pref_group_path", type=str, default="/data/minseo/personal-api-experiments/pref_group.json")
+    parser.add_argument("--tools_schema_path", type=str, default="/data/minseo/personal-api-experiments/tools_schema.json")
 
     parser.add_argument("--context_type", type=str, choices=["diag-apilist", "apilist-only", "diag-only"], default="diag-apilist")
     parser.add_argument("--pref_type", type=str, choices=["medium", "easy", "hard"], required=True)

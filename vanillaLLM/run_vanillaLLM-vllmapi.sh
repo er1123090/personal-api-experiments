@@ -4,25 +4,25 @@
 # 1. 환경 설정 및 경로
 # ==============================================================================
 # Python 클라이언트 스크립트 (수정된 버전)
-PYTHON_SCRIPT="/data/minseo/personal-tool/conv_api/experiments3/vanillaLLM/vanillaLLM_inference-vllmapi.py"
+PYTHON_SCRIPT="/data/minseo/personal-api-experiments/vanillaLLM/vanillaLLM_inference-vllmapi.py"
 
 # 데이터 및 스키마 경로
-INPUT_PATH="/data/minseo/personal-tool/conv_api/experiments3/data/dev_4.json"
-QUERY_PATH="/data/minseo/personal-tool/conv_api/experiments3/temp_queries.json"
-PREF_LIST_PATH="/data/minseo/personal-tool/conv_api/experiments3/pref_list.json"
-PREF_GROUP_PATH="/data/minseo/personal-tool/conv_api/experiments3/pref_group.json"
-TOOLS_SCHEMA_PATH="/data/minseo/personal-tool/conv_api/experiments3/tools_schema.json"
+INPUT_PATH="/data/minseo/personal-api-experiments/data/dev_4.json"
+QUERY_PATH="/data/minseo/personal-api-experiments/temp_queries.json"
+PREF_LIST_PATH="/data/minseo/personal-api-experiments/pref_list.json"
+PREF_GROUP_PATH="/data/minseo/personal-api-experiments/pref_group.json"
+TOOLS_SCHEMA_PATH="/data/minseo/personal-api-experiments/tools_schema.json"
 
 # 출력 디렉토리
-BASE_OUTPUT_DIR="/data/minseo/personal-tool/conv_api/experiments3/vanillaLLM/inference/output"
-BASE_LOG_DIR="/data/minseo/personal-tool/conv_api/experiments3/vanillaLLM/inference/logs"
+BASE_OUTPUT_DIR="/data/minseo/personal-api-experiments/vanillaLLM/inference/output"
+BASE_LOG_DIR="/data/minseo/personal-api-experiments/vanillaLLM/inference/logs"
 
 # 태그 설정
 DATE_TAG="$(date +%m%d)"
 TEST_TAG="test1"
 
 # GPU 설정 (서버가 사용할 GPU ID)
-GPU_ID=1
+GPU_ID=1,2,3
 PORT=8001
 VLLM_URL="http://localhost:$PORT/v1"
 
@@ -30,11 +30,11 @@ VLLM_URL="http://localhost:$PORT/v1"
 # 2. 실험 변수 (모델 목록 등)
 # ==============================================================================
 MODELS=(
-    # "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
-    # "meta-llama/Llama-3.1-8B-Instruct"
-    # "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
-    # "Qwen/Qwen3-VL-8B-Instruct"
-    # "google/gemma-3-12b-it"
+    "deepseek-ai/DeepSeek-R1-Distill-Llama-8B"
+    "meta-llama/Llama-3.1-8B-Instruct"
+    "deepseek-ai/DeepSeek-R1-0528-Qwen3-8B"
+    "Qwen/Qwen3-VL-8B-Instruct"
+    "google/gemma-3-12b-it"
     "google/codegemma-7b-it"
 
 )
@@ -43,7 +43,7 @@ PROMPT_TYPES=("imp-zs" "imp-pref-group")
 CONTEXT_TYPES=("diag-apilist")
 PREF_TYPES=("easy" "medium" "hard")
 
-TP_SIZE=1
+TP_SIZE=2
 
 # ==============================================================================
 # 3. 헬퍼 함수: 서버 대기
@@ -97,6 +97,7 @@ for model in "${MODELS[@]}"; do
         --enable-auto-tool-choice \
         --tool-call-parser $PARSER \
         --max-model-len 8192 \
+        --enforce-eager \
         --trust-remote-code > vllm_server.log 2>&1 &
         #16384
     SERVER_PID=$!
@@ -114,12 +115,12 @@ for model in "${MODELS[@]}"; do
 
                 echo "   >> Running: Prompt=$prompt_type | Pref=$pref"
 
-                OUTPUT_DIR="$BASE_OUTPUT_DIR/$context/$pref/model=$MODEL_SAFE_NAME"
-                LOG_DIR="$BASE_LOG_DIR/$context/$pref/model=$MODEL_SAFE_NAME"
+                OUTPUT_DIR="$BASE_OUTPUT_DIR/$context/$pref/$MODEL_SAFE_NAME/$prompt_type"
+                LOG_DIR="$BASE_LOG_DIR$context/$pref/$MODEL_SAFE_NAME/$prompt_type"
                 mkdir -p "$OUTPUT_DIR" "$LOG_DIR"
 
-                FILENAME="${DATE_TAG}_${prompt_type}_${TEST_TAG}.jsonl"
-                LOGNAME="${DATE_TAG}_${prompt_type}_${TEST_TAG}.log"
+                FILENAME="${DATE_TAG}_${TEST_TAG}.json"
+                LOGNAME="${DATE_TAG}_${TEST_TAG}.jsonl"
                 OUTPUT_FILE="$OUTPUT_DIR/$FILENAME"
                 LOG_FILE="$LOG_DIR/$LOGNAME"
 
@@ -136,7 +137,8 @@ for model in "${MODELS[@]}"; do
                     --model_name "$model" \
                     --output_path "$OUTPUT_FILE" \
                     --log_path "$LOG_FILE" \
-                    --vllm_url "$VLLM_URL"
+                    --vllm_url "$VLLM_URL" \
+                    
 
             done
         done
