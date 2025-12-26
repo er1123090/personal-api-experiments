@@ -57,6 +57,7 @@ def filter_triples_by_preference(triples, preference_map):
 def evaluate_single_file(file_path, preference_map=None):
     """
     단일 JSON 파일을 로드하여 평가 메트릭을 반환합니다.
+    [수정됨] 파싱 성공/실패 횟수(parse_success_cnt, parse_fail_cnt) 집계 추가
     """
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -72,6 +73,10 @@ def evaluate_single_file(file_path, preference_map=None):
     ps_tp, ps_fp, ps_fn = 0, 0, 0
     valid_samples = 0
 
+    # [추가됨] Parsing Statistics Counters
+    parse_success_cnt = 0
+    parse_fail_cnt = 0
+
     for item in data:
         gt_str = str(item.get("reference_ground_truth", "") or "").strip()
         pred_str = str(item.get("llm_output", "") or "").strip()
@@ -81,6 +86,12 @@ def evaluate_single_file(file_path, preference_map=None):
         
         gt_parsed = parse_api_string(gt_str)
         pred_parsed = parse_api_string(pred_str)
+
+        # [추가됨] Check Parsing Status
+        if len(pred_parsed) > 0:
+            parse_success_cnt += 1
+        else:
+            parse_fail_cnt += 1
 
         # JSON Heuristic Match
         if len(pred_parsed) == 1 and pred_parsed[0][0] == "__JSON_PARSED__":
@@ -129,6 +140,10 @@ def evaluate_single_file(file_path, preference_map=None):
 
     return {
         "valid_samples": valid_samples,
+        # [추가됨] Return Parsing Stats
+        "parse_success": parse_success_cnt,
+        "parse_fail": parse_fail_cnt,
+        
         "domain_acc": d_acc,
         "domain_f1": d_f1,
         "slot_prec": s_prec,
@@ -164,15 +179,19 @@ def aggregate_results(root_dir, pref_file, output_csv):
     print(f"Found {len(files_found)} JSON files. Starting evaluation...")
 
     for file_path in tqdm(files_found):
-        # 1. Metadata Parsing from Path
-        # Expected structure: .../output/<context_type>/<pref_type>/<filename>.json
+        # --------------------------------------------------------------------------
+        # 경로 파싱 로직
+        # 타겟 구조: .../output/{context}/{difficulty}/{model}/{pref_group}/{filename}
+        # --------------------------------------------------------------------------
         path_parts = file_path.split(os.sep)
         
         try:
-            # 경로 끝에서부터 역추적 (유연성 확보)
-            filename = path_parts[-1]
-            pref_type = path_parts[-2]     # e.g., easy, medium, hard
-            context_type = path_parts[-3]  # e.g., memory_only, diag_only
+            # 경로의 끝에서부터 역순으로 추출
+            filename = path_parts[-1]           # 1225_test1.json
+            pref_group = path_parts[-2]         # imp-pref-group
+            model_name = path_parts[-3]         # google_codegemma-7b-it
+            difficulty = path_parts[-4]         # easy
+            context_type = path_parts[-5]       # diag-apilist (or memory-only)
             
             # Experiment Group (ours_memory, mem0, vanillaLLM) 찾기
             exp_group = "unknown"
@@ -181,20 +200,32 @@ def aggregate_results(root_dir, pref_file, output_csv):
             elif "vanillaLLM" in path_parts: exp_group = "vanillaLLM"
             
         except IndexError:
-            pref_type = "unknown"
-            context_type = "unknown"
-            exp_group = "unknown"
+            # 경로 깊이가 얕을 경우 예외 처리
+            print(f"Skipping malformed path: {file_path}")
+            continue
 
         # 2. Run Evaluation
         metrics = evaluate_single_file(file_path, preference_map)
         
         if metrics:
+            # [추가됨] Calculate Error Rate
+            total_attempts = metrics["parse_success"] + metrics["parse_fail"]
+            error_rate = (metrics["parse_fail"] / total_attempts) if total_attempts > 0 else 0.0
+
             row = {
                 "experiment_group": exp_group,
                 "context_type": context_type,
-                "pref_type": pref_type,
+                "difficulty": difficulty,      
+                "model_name": model_name,      
+                "pref_group": pref_group,      
                 "filename": filename,
                 "valid_samples": metrics["valid_samples"],
+                
+                # [추가됨] Parsing Stats Columns
+                "parse_success": metrics["parse_success"],
+                "parse_fail": metrics["parse_fail"],
+                "parse_error_rate": round(error_rate, 4),
+
                 # Domain
                 "domain_acc": round(metrics["domain_acc"], 4),
                 # General Slots
@@ -211,24 +242,29 @@ def aggregate_results(root_dir, pref_file, output_csv):
     # 3. Save to CSV
     if results_list:
         df = pd.DataFrame(results_list)
-        # 보기 좋게 정렬 (Experiment -> Context -> Pref)
-        df = df.sort_values(by=["experiment_group", "context_type", "pref_type"])
+        
+        # 보기 좋게 정렬 (Exp -> Context -> Diff -> Model -> Group)
+        sort_cols = ["experiment_group", "context_type", "difficulty", "model_name", "pref_group"]
+        actual_sort_cols = [c for c in sort_cols if c in df.columns]
+        df = df.sort_values(by=actual_sort_cols)
         
         output_dir = os.path.dirname(output_csv)
-        print(output_dir)
         if output_dir:
             os.makedirs(output_dir, exist_ok=True)        
         
         df.to_csv(output_csv, index=False, encoding='utf-8-sig')
         print(f"\nSuccessfully saved aggregated results to: {output_csv}")
-        print(df[["experiment_group", "context_type", "pref_type", "pref_slot_f1"]].to_string())
+        
+        # [수정됨] 미리보기에 에러율 컬럼 추가
+        preview_cols = ["experiment_group", "model_name", "difficulty", "parse_error_rate", "pref_slot_f1"]
+        print(df[[c for c in preview_cols if c in df.columns]].to_string())
     else:
         print("No results found or processed.")
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--root_dir", type=str, required=True, help="Root directory containing output JSON files")
-    parser.add_argument("--pref_file", type=str, default="/data/minseo/personal-tool/conv_api/experiments3/vanillaLLM/pref_list.json")
+    parser.add_argument("--pref_file", type=str, default="/data/minseo/personal-api-experiments/pref_list.json")
     parser.add_argument("--output_csv", type=str, default="aggregated_results.csv")
     
     args = parser.parse_args()
